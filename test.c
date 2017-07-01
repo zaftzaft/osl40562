@@ -40,33 +40,6 @@ int show(int n, int dot) {
   }
 }
 
-float getValue(int *d[4]) {
-  FILE *fp;
-  float val;
-  char str[32];
-  int x;
-
-  if((fp = fopen("/tmp/node_exporter/tmp102.prom", "r")) == NULL) {
-    fprintf(stderr, "read err\n");
-    return 0.0;
-  }
-
-  fscanf(fp, "%s %f", str, &val);
-  fclose(fp);
-
-
-  val = val * 100;
-  x = (int)val;
-  d[3] = x % 10;
-  d[2] = (x / 10) % 10;
-  d[1] = (x / 100) % 10;
-  d[0] = (x / 1000) % 10;
-
-  printf("read\n");
-
-  return val;
-}
-
 int main() {
   int i, x;
   float val;
@@ -74,8 +47,9 @@ int main() {
   struct timeval basetime;
   struct timeval nowtime;
   int counter = 0;
+  int dot = 0;
 
-  getValue(d);
+  //getValue(d);
 
   if(!bcm2835_init()) {
     return 1;
@@ -92,11 +66,11 @@ int main() {
   gettimeofday(&basetime, NULL);
 
   while(1) {
-    //gettimeofday(&nowtime, NULL);
-    //if(nowtime.tv_sec - basetime.tv_sec > 10) {
-    //  getValue(d);
-    //  gettimeofday(&basetime, NULL);
-    //}
+    gettimeofday(&nowtime, NULL);
+    if(nowtime.tv_sec - basetime.tv_sec > 1) {
+      dot = 1 ^ dot;
+      gettimeofday(&basetime, NULL);
+    }
 
     d[3] = counter % 10;
     d[2] = (counter / 10) % 10;
@@ -104,20 +78,20 @@ int main() {
     d[0] = (counter / 1000) % 10;
 
     sw(0);
-    show(d[0], 0);
-    bcm2835_delay(5);
+    show(d[0], dot);
+    bcm2835_delay(2);
 
     sw(1);
-    show(d[1], 1);
-    bcm2835_delay(5);
+    show(d[1], dot);
+    bcm2835_delay(2);
 
     sw(2);
-    show(d[2], 0);
-    bcm2835_delay(5);
+    show(d[2], dot);
+    bcm2835_delay(2);
 
     sw(3);
-    show(d[3], 0);
-    bcm2835_delay(5);
+    show(d[3], dot);
+    bcm2835_delay(2);
 
     if(++counter > 9999) {
       counter = 0;
