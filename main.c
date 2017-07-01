@@ -99,19 +99,19 @@ int main() {
 
     sw(0);
     show(d[0], 0);
-    bcm2835_delay(5);
+    bcm2835_delay(3);
 
     sw(1);
     show(d[1], 1);
-    bcm2835_delay(5);
+    bcm2835_delay(3);
 
-    //sw(2);
-    //show(d[2], 0);
-    //bcm2835_delay(5);
+    sw(2);
+    show(d[2], 0);
+    bcm2835_delay(3);
 
-    //sw(3);
-    //show(d[3], 0);
-    //bcm2835_delay(5);
+    sw(3);
+    show(d[3], 0);
+    bcm2835_delay(3);
   }
 
   bcm2835_close();

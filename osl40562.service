@@ -1,0 +1,10 @@
+[Unit]
+Description=osl40562
+
+[Service]
+ExecStart=/usr/local/bin/osl40562
+
+[Install]
+WantedBy=default.target
+
+
